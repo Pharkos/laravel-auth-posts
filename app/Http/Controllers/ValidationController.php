@@ -95,17 +95,22 @@ class ValidationController extends Controller
     }
 
 
-    // ------------- Logout
+    
+      // Logout: termina la sessione dell'utente in modo sicuro
+        public function logout(Request $request)
+        {
+            // Rimuove l'utente autenticato dalla sessione corrente
+            Auth::logout();
 
-    public function logout(Request $request){
-        Auth::logout(); // slogga l'utente  
-        // pulisce la sessione
-        $request->session()->invalidate();
-        // genera il nuovo toker scrf
-        $request->session()->regenerate();
-        return redirect('/')->with('success', 'Logout eseguito con successo');
-    }
+            // Cancella tutti i dati della sessione e genera un nuovo Session ID
+            // (impedisce il riutilizzo della vecchia sessione)
+            $request->session()->invalidate();
 
+            // Genera un nuovo token CSRF: i form aperti con il vecchio token non sono più validi
+            $request->session()->regenerateToken();
+
+            return redirect('/')->with('success', 'Logout eseguito con successo');
+        }
  
 
 
