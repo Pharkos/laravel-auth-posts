@@ -22,7 +22,6 @@ class ValidationController extends Controller
             // unique:user,email: dice che non possono stare utenti con la stessa email
             // quindi users indica il nome della tabella e email il nome del campo  
             'email' => 'required|email|max:255|unique:users,email', 
-            'age' => 'required|integer|min:18|max:108',
             'password' => 'required|string|min:8|confirmed',
             ]
             );
