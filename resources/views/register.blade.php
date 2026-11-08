@@ -25,7 +25,6 @@
     {{--old() se viene sbagliato un campo, laravel mantiene in memoria l'ultimo valore assegnato  --}}
     nome <input type="text" name="name" id="name" value="{{ old('name')}}"><br>
     email <input type="email" name="email" id="email" value="{{ old('email')}}"><br>
-    età <input type="number" name="age" id="age" value="{{ old('age')}}"><br>
     password <input type="password" name="password" id="password" > <br>
     {{-- name="password_confirmation" ATTENZIONE PER VALIDARE IL CAMPO DELLE DUE 
          password DEVI USARE IL NAME IMPOSTATO CON password_confirmation --}}

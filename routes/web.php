@@ -34,32 +34,38 @@ Route::get('/about', function () {
 // ==========================================================
 
 
-// ---------- Register ----------
+// ---------- Guest Routes ----------
+// Accessibili solo agli utenti NON autenticati.
+// Se un utente già loggato prova ad aprirle,
+// il middleware 'guest' lo reindirizza alla home.
 
-// GET /register → mostra il form di registrazione
-Route::get('/register', [ValidationController::class, 'showRegisterForm'])
-    ->name('register');
+Route::middleware('guest')->group(function () {
 
-// POST /validateForm → valida i dati e crea un nuovo User
-Route::post('/validateForm', [ValidationController::class, 'validateForm'])
-    ->name('validateForm');
+    // GET /register → mostra il form di registrazione
+    Route::get('/register', [ValidationController::class, 'showRegisterForm'])
+        ->name('register');
 
+    // POST /validateForm → valida i dati e crea un nuovo User
+    Route::post('/validateForm', [ValidationController::class, 'validateForm'])
+        ->name('validateForm');
 
-// ---------- Login ----------
+    // GET /login → mostra il form di Login
+    Route::get('/login', [ValidationController::class, 'showLoginForm'])
+        ->name('login');
 
-// GET /login → mostra il form di Login
-Route::get('/login', [ValidationController::class, 'showLoginForm'])
-    ->name('login');
-
-// POST /login → verifica le credenziali ed effettua il Login
-Route::post('/login', [ValidationController::class, 'login'])
-    ->name('loginUser');
+    // POST /login → verifica le credenziali ed effettua il Login
+    Route::post('/login', [ValidationController::class, 'login'])
+        ->name('loginUser');
+});
 
 
 // ---------- Logout ----------
+// Solo un utente autenticato può effettuare il logout:
+// il middleware 'auth' blocca le richieste dei visitatori.
 
 // POST /logout → effettua il Logout dell'utente
 Route::post('/logout', [ValidationController::class, 'logout'])
+    ->middleware('auth')
     ->name('logoutUser');
 
 
@@ -155,6 +161,3 @@ Route::post('/profile/information/password', [ProfileController::class, 'updateP
     ->name('profile.information.password.update');
 
 });
-
-
-
