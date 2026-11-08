@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class ValidationController extends Controller
 {
@@ -19,6 +18,8 @@ class ValidationController extends Controller
         $validateData = $request->validate(
             [
             'name' => 'required|string|max:255',  
+
+
             // unique:user,email: dice che non possono stare utenti con la stessa email
             // quindi users indica il nome della tabella e email il nome del campo  
             'email' => 'required|email|max:255|unique:users,email', 
@@ -32,8 +33,9 @@ class ValidationController extends Controller
         $user = User::create([
             'name' => $validateData['name'],    
             'email' => $validateData['email'],
-            // la password viene hashata
-            'password' => Hash::make($validateData['password'],),
+            // Non serve Hash::make(): nel model User il campo 'password'
+            // ha il cast 'hashed', quindi Laravel genera automaticamente l'hash prima del salvataggio
+            'password' => $validateData['password'],
         ]);
 
         // authentication fa il login in automatico 
