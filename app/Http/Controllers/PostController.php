@@ -46,10 +46,9 @@ class PostController extends Controller
         return redirect()->route('post.index');
     }
 
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::findOrFail($id);
-
+       
         return view('posts.show', [
             'pageTitle' => 'Show',
             'metaTitle' => 'La mia pagina Show',
@@ -57,10 +56,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $post = Post::findOrFail($id);
-
+        
         Gate::authorize('update', $post);
 
         return view('posts.edit', [
@@ -70,10 +68,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        $post = Post::findOrFail($id);
-
+        
         Gate::authorize('update', $post);
 
         $validatedData = $request->validate([
@@ -86,10 +83,8 @@ class PostController extends Controller
         return redirect()->route('post.show', $post->id);
     }
 
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        $post = Post::findOrFail($id);
-
         Gate::authorize('delete', $post);
 
         // Elimina il post

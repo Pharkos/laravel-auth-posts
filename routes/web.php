@@ -96,22 +96,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts', [PostController::class, 'store'])
         ->name('post.store');
 
-    // GET /posts/{id}/edit → mostra il form per modificare un post
-    Route::get('/posts/{id}/edit', [PostController::class, 'edit'])
+    // GET /posts/{post}/edit → mostra il form per modificare un post
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
         ->name('post.edit');
 
-    // PUT /posts/{id} → aggiorna un post
-    Route::put('/posts/{id}', [PostController::class, 'update'])
+    // PUT /posts/{post} → aggiorna un post
+    Route::put('/posts/{post}', [PostController::class, 'update'])
         ->name('post.update');
 
-    // DELETE /posts/{id} → elimina un post
-    Route::delete('/posts/{id}', [PostController::class, 'destroy'])
+    // DELETE /posts/{post} → elimina un post
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])
         ->name('post.destroy');
 });
 
 
-// GET /posts/{id} → visualizza un singolo post
-Route::get('/posts/{id}', [PostController::class, 'show'])
+// GET /posts/{post} → visualizza un singolo post
+Route::get('/posts/{post}', [PostController::class, 'show'])
     ->name('post.show');
 
 
