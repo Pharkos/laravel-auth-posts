@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ValidationController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 
@@ -42,19 +42,19 @@ Route::get('/about', function () {
 Route::middleware('guest')->group(function () {
 
     // GET /register → mostra il form di registrazione
-    Route::get('/register', [ValidationController::class, 'showRegisterForm'])
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])
         ->name('register');
 
-    // POST /validateForm → valida i dati e crea un nuovo User
-    Route::post('/validateForm', [ValidationController::class, 'validateForm'])
-        ->name('validateForm');
+        // POST /register → valida i dati, crea un nuovo User ed effettua il login
+    Route::post('/register', [AuthController::class, 'register'])
+        ->name('register.store');
 
     // GET /login → mostra il form di Login
-    Route::get('/login', [ValidationController::class, 'showLoginForm'])
+    Route::get('/login', [AuthController::class, 'showLoginForm'])
         ->name('login');
 
     // POST /login → verifica le credenziali ed effettua il Login
-    Route::post('/login', [ValidationController::class, 'login'])
+    Route::post('/login', [AuthController::class, 'login'])
         ->name('loginUser');
 });
 
@@ -64,7 +64,7 @@ Route::middleware('guest')->group(function () {
 // il middleware 'auth' blocca le richieste dei visitatori.
 
 // POST /logout → effettua il Logout dell'utente
-Route::post('/logout', [ValidationController::class, 'logout'])
+Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logoutUser');
 
@@ -96,22 +96,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts', [PostController::class, 'store'])
         ->name('post.store');
 
-    // GET /posts/{id}/edit → mostra il form per modificare un post
-    Route::get('/posts/{id}/edit', [PostController::class, 'edit'])
+    // GET /posts/{post}/edit → mostra il form per modificare un post
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
         ->name('post.edit');
 
-    // PUT /posts/{id} → aggiorna un post
-    Route::put('/posts/{id}', [PostController::class, 'update'])
+    // PUT /posts/{post} → aggiorna un post
+    Route::put('/posts/{post}', [PostController::class, 'update'])
         ->name('post.update');
 
-    // DELETE /posts/{id} → elimina un post
-    Route::delete('/posts/{id}', [PostController::class, 'destroy'])
+    // DELETE /posts/{post} → elimina un post
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])
         ->name('post.destroy');
 });
 
 
-// GET /posts/{id} → visualizza un singolo post
-Route::get('/posts/{id}', [PostController::class, 'show'])
+// GET /posts/{post} → visualizza un singolo post
+Route::get('/posts/{post}', [PostController::class, 'show'])
     ->name('post.show');
 
 
