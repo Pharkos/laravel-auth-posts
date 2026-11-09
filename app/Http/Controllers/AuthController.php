@@ -6,14 +6,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ValidationController extends Controller
+class AuthController extends Controller
 {
     public function showRegisterForm(){
         return view('register',['pageTitle' => 'Register',
    'metaTitle' => 'la mia pagina Register']);
     }
-
-    public function validateForm(Request $request){
+// Registrazione: valida i dati, crea l'utente ed effettua il login automatico
+    public function register(Request $request){
 
         $validateData = $request->validate(
             [

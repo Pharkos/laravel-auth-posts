@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ValidationController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 
@@ -42,19 +42,19 @@ Route::get('/about', function () {
 Route::middleware('guest')->group(function () {
 
     // GET /register → mostra il form di registrazione
-    Route::get('/register', [ValidationController::class, 'showRegisterForm'])
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])
         ->name('register');
 
-    // POST /validateForm → valida i dati e crea un nuovo User
-    Route::post('/validateForm', [ValidationController::class, 'validateForm'])
-        ->name('validateForm');
+        // POST /register → valida i dati, crea un nuovo User ed effettua il login
+    Route::post('/register', [AuthController::class, 'register'])
+        ->name('register.store');
 
     // GET /login → mostra il form di Login
-    Route::get('/login', [ValidationController::class, 'showLoginForm'])
+    Route::get('/login', [AuthController::class, 'showLoginForm'])
         ->name('login');
 
     // POST /login → verifica le credenziali ed effettua il Login
-    Route::post('/login', [ValidationController::class, 'login'])
+    Route::post('/login', [AuthController::class, 'login'])
         ->name('loginUser');
 });
 
@@ -64,7 +64,7 @@ Route::middleware('guest')->group(function () {
 // il middleware 'auth' blocca le richieste dei visitatori.
 
 // POST /logout → effettua il Logout dell'utente
-Route::post('/logout', [ValidationController::class, 'logout'])
+Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logoutUser');
 

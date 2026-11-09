@@ -82,7 +82,7 @@ class AuthTest extends TestCase
     // Registrazione: crea l'utente, effettua il login e salva la password come hash
     public function test_user_can_register_and_password_is_hashed(): void
     {
-        $response = $this->post('/validateForm', [
+        $response = $this->post('/register', [
             'name' => 'Mario',
             'email' => 'mario@test.com',
             'password' => 'password123',
