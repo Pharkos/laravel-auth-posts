@@ -39,7 +39,7 @@ class PostController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('post.index');
+        return redirect()->route('post.index')->with('success', 'Post creato con successo');
     }
 
     public function show(Post $post)
@@ -69,7 +69,7 @@ class PostController extends Controller
 
         $post->update($request->validated());
 
-        return redirect()->route('post.show', $post);
+        return redirect()->route('post.show', $post)->with('success', 'Post aggiornato con successo');
     }
 
     public function destroy(Post $post)
