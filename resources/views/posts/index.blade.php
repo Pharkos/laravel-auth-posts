@@ -17,7 +17,7 @@
     <div class="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
 
         @auth
-            <a href="{{ route('post.create') }}">
+            <a href="{{ route('posts.create') }}">
                 Create Post
             </a>
         @endauth
@@ -50,7 +50,7 @@
                             {{ Str::limit($post->content, 50) }}
                         </p>
 
-                        <a href="{{ route('post.show', $post->id) }}">
+                        <a href="{{ route('posts.show', $post->id) }}">
                             Leggi post completo
                         </a>
 

@@ -73,46 +73,23 @@ Route::post('/logout', [AuthController::class, 'logout'])
 // POSTS
 // ==========================================================
 
-
-// ---------- Public Routes ----------
-// Accessibili anche agli utenti non autenticati
-
-
-// GET /posts → visualizza la lista dei post
-Route::get('/posts', [PostController::class, 'index'])
-    ->name('post.index');
-
+// Route::resource crea le 7 rotte CRUD standard (posts.index, posts.show, ecc.)
 
 // ---------- Protected Routes ----------
-// Accessibili solo agli utenti autenticati
-
+// create, store, edit, update, destroy: solo utenti autenticati.
+// Devono stare PRIMA di 'show', altrimenti /posts/create
+// verrebbe interpretato come /posts/{post} con post = "create" (404)
 Route::middleware('auth')->group(function () {
-
-    // GET /posts/create → mostra il form per creare un post
-    Route::get('/posts/create', [PostController::class, 'create'])
-        ->name('post.create');
-
-    // POST /posts → valida e salva un nuovo post
-    Route::post('/posts', [PostController::class, 'store'])
-        ->name('post.store');
-
-    // GET /posts/{post}/edit → mostra il form per modificare un post
-    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
-        ->name('post.edit');
-
-    // PUT /posts/{post} → aggiorna un post
-    Route::put('/posts/{post}', [PostController::class, 'update'])
-        ->name('post.update');
-
-    // DELETE /posts/{post} → elimina un post
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])
-        ->name('post.destroy');
+    Route::resource('posts', PostController::class)
+        ->except(['index', 'show']);
 });
 
+// ---------- Public Routes ----------
+// index e show: accessibili anche ai visitatori
+Route::resource('posts', PostController::class)
+    ->only(['index', 'show']);
 
-// GET /posts/{post} → visualizza un singolo post
-Route::get('/posts/{post}', [PostController::class, 'show'])
-    ->name('post.show');
+
 
 
 

@@ -10,7 +10,7 @@
     </li>
 
     <li>
-        <a href="{{ route('post.index') }}">Posts</a>
+        <a href="{{ route('posts.index') }}">Posts</a>
     </li>
 
 

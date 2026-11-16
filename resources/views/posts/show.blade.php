@@ -5,7 +5,7 @@
 <div class="container">
 
     {{-- Ritorna alla lista dei post --}}
-    <a href="{{ route('post.index') }}" class="btn">
+    <a href="{{ route('posts.index') }}" class="btn">
         ← Torna alla lista
     </a>
 
@@ -24,7 +24,7 @@
     @can('update' , $post)
     
     {{-- Modifica del post --}}
-    <a class="btn" href="{{ route('post.edit', $post->id) }}">
+    <a class="btn" href="{{ route('posts.edit', $post->id) }}">
         Modifica Post
     </a>
 
@@ -34,7 +34,7 @@
 
     @can('delete' , $post)
     <form
-        action="{{ route('post.destroy', $post->id) }}"
+        action="{{ route('posts.destroy', $post->id) }}"
         method="POST"
         style="display:inline"
     >
