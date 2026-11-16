@@ -115,8 +115,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/information/name', [ProfileController::class, 'editName'])
         ->name('profile.information.name');
 
-            // POST /profile/information/name → aggiorna il nome dell'utente
-    Route::post('/profile/information/name', [ProfileController::class, 'updateName'])
+        // PATCH /profile/information/name → aggiorna il nome dell'utente
+    Route::patch('/profile/information/name', [ProfileController::class, 'updateName'])
         ->name('profile.information.name.update');
 
         // GET /profile/information/email → mostra il form per modificare l'email
@@ -124,8 +124,8 @@ Route::middleware('auth')->group(function () {
     ->name('profile.information.email');
 
 
-    // POST /profile/information/email → aggiorna l'email dell'utente
-Route::post('/profile/information/email', [ProfileController::class, 'updateEmail'])
+       // PATCH /profile/information/email → aggiorna l'email dell'utente
+    Route::patch('/profile/information/email', [ProfileController::class, 'updateEmail'])
     ->name('profile.information.email.update');
 
     // GET /profile/information/password → mostra il form per modificare la password
@@ -133,8 +133,8 @@ Route::get('/profile/information/password', [ProfileController::class, 'editPass
     ->name('profile.information.password');
 
 
-    // POST /profile/information/password → aggiorna la password dell'utente
-Route::post('/profile/information/password', [ProfileController::class, 'updatePassword'])
+        // PATCH /profile/information/password → aggiorna la password dell'utente
+    Route::patch('/profile/information/password', [ProfileController::class, 'updatePassword'])
     ->name('profile.information.password.update');
 
 });
