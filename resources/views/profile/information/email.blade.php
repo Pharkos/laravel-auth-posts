@@ -25,17 +25,27 @@
 
         @csrf
 
-        <label for="email">
+        {{-- Laravel trasforma la richiesta POST in PATCH --}}
+        @method('PATCH')
+
+        <label for="email" class="form-label">
             New Email
         </label>
 
+        {{-- 'is-invalid' colora il campo di rosso se c'è un errore di validazione --}}
         <input
             type="email"
             id="email"
             name="email"
-            value="{{ $currentUser->email }}"
+            class="form-control @error('email') is-invalid @enderror"
+            value="{{ old('email', $currentUser->email) }}"
             required
         >
+
+        {{-- Messaggio di errore sotto il campo (es. email già usata) --}}
+        @error('email')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
 
         <button type="submit">
             Update Email

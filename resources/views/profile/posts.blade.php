@@ -28,7 +28,7 @@
                     <p>{{ Str::limit($post->content, 50) }}</p>
 
                     {{-- Apre il post completo --}}
-                    <a href="{{ route('post.show', $post->id) }}">
+                    <a href="{{ route('posts.show', $post->id) }}">
                         Leggi post completo
                     </a>
 

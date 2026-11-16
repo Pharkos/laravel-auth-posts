@@ -15,7 +15,11 @@
 
         @csrf
 
-        <label for="current_password">
+        {{-- Laravel trasforma la richiesta POST in PATCH --}}
+        @method('PATCH')
+
+        {{-- Password attuale --}}
+        <label for="current_password" class="form-label">
             Current Password
         </label>
 
@@ -23,12 +27,19 @@
             type="password"
             id="current_password"
             name="current_password"
+            class="form-control @error('current_password') is-invalid @enderror"
             required
         >
 
-        <br><br>
+        {{-- Errore se la password attuale non è corretta --}}
+        @error('current_password')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
 
-        <label for="password">
+        <br>
+
+        {{-- Nuova password --}}
+        <label for="password" class="form-label">
             New Password
         </label>
 
@@ -36,12 +47,19 @@
             type="password"
             id="password"
             name="password"
+            class="form-control @error('password') is-invalid @enderror"
             required
         >
 
-        <br><br>
+        {{-- Errore sulla nuova password (es. troppo corta o conferma diversa) --}}
+        @error('password')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
 
-        <label for="password_confirmation">
+        <br>
+
+        {{-- Conferma della nuova password (regola 'confirmed') --}}
+        <label for="password_confirmation" class="form-label">
             Confirm New Password
         </label>
 
@@ -49,10 +67,11 @@
             type="password"
             id="password_confirmation"
             name="password_confirmation"
+            class="form-control"
             required
         >
 
-        <br><br>
+        <br>
 
         <button type="submit">
             Update Password

@@ -6,7 +6,7 @@
 
     <h2>Crea il tuo post</h2>
 
-    <form action="{{ route('post.store') }}" method="POST">
+    <form action="{{ route('posts.store') }}" method="POST">
 
         @csrf
 

@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-
+use Illuminate\Support\Facades\Route;
 
 // ==========================================================
 // HOME & ABOUT
@@ -18,7 +17,6 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-
 // GET /about → mostra la pagina About
 Route::get('/about', function () {
     return view('about', [
@@ -27,12 +25,10 @@ Route::get('/about', function () {
     ]);
 })->name('about');
 
-
 // ==========================================================
 // AUTHENTICATION
 // REGISTER, LOGIN & LOGOUT
 // ==========================================================
-
 
 // ---------- Guest Routes ----------
 // Accessibili solo agli utenti NON autenticati.
@@ -45,7 +41,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegisterForm'])
         ->name('register');
 
-        // POST /register → valida i dati, crea un nuovo User ed effettua il login
+    // POST /register → valida i dati, crea un nuovo User ed effettua il login
     Route::post('/register', [AuthController::class, 'register'])
         ->name('register.store');
 
@@ -58,7 +54,6 @@ Route::middleware('guest')->group(function () {
         ->name('loginUser');
 });
 
-
 // ---------- Logout ----------
 // Solo un utente autenticato può effettuare il logout:
 // il middleware 'auth' blocca le richieste dei visitatori.
@@ -68,55 +63,27 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logoutUser');
 
-
 // ==========================================================
 // POSTS
 // ==========================================================
 
-
-// ---------- Public Routes ----------
-// Accessibili anche agli utenti non autenticati
-
-
-// GET /posts → visualizza la lista dei post
-Route::get('/posts', [PostController::class, 'index'])
-    ->name('post.index');
-
+// Route::resource crea le 7 rotte CRUD standard (posts.index, posts.show, ecc.)
 
 // ---------- Protected Routes ----------
-// Accessibili solo agli utenti autenticati
-
+// create, store, edit, update, destroy: solo utenti autenticati.
+// Devono stare PRIMA di 'show', altrimenti /posts/create
+// verrebbe interpretato come /posts/{post} con post = "create" (404)
 Route::middleware('auth')->group(function () {
-
-    // GET /posts/create → mostra il form per creare un post
-    Route::get('/posts/create', [PostController::class, 'create'])
-        ->name('post.create');
-
-    // POST /posts → valida e salva un nuovo post
-    Route::post('/posts', [PostController::class, 'store'])
-        ->name('post.store');
-
-    // GET /posts/{post}/edit → mostra il form per modificare un post
-    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
-        ->name('post.edit');
-
-    // PUT /posts/{post} → aggiorna un post
-    Route::put('/posts/{post}', [PostController::class, 'update'])
-        ->name('post.update');
-
-    // DELETE /posts/{post} → elimina un post
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])
-        ->name('post.destroy');
+    Route::resource('posts', PostController::class)
+        ->except(['index', 'show']);
 });
 
+// ---------- Public Routes ----------
+// index e show: accessibili anche ai visitatori
+Route::resource('posts', PostController::class)
+    ->only(['index', 'show']);
 
-// GET /posts/{post} → visualizza un singolo post
-Route::get('/posts/{post}', [PostController::class, 'show'])
-    ->name('post.show');
-
-
-
-    // ==========================================================
+// ==========================================================
 // PROFILE
 // ==========================================================
 
@@ -128,36 +95,34 @@ Route::middleware('auth')->group(function () {
 
     // GET /profile/posts → mostra i post dell'utente autenticato
     Route::get('/profile/posts', [ProfileController::class, 'myPosts'])
-    ->name('profile.posts');
+        ->name('profile.posts');
 
     // GET /profile/information → mostra le informazioni personali
     Route::get('/profile/information', [ProfileController::class, 'information'])
-    ->name('profile.information');
+        ->name('profile.information');
 
-        // GET /profile/information/name → mostra il form per modificare il nome
+    // GET /profile/information/name → mostra il form per modificare il nome
     Route::get('/profile/information/name', [ProfileController::class, 'editName'])
         ->name('profile.information.name');
 
-            // POST /profile/information/name → aggiorna il nome dell'utente
-    Route::post('/profile/information/name', [ProfileController::class, 'updateName'])
+    // PATCH /profile/information/name → aggiorna il nome dell'utente
+    Route::patch('/profile/information/name', [ProfileController::class, 'updateName'])
         ->name('profile.information.name.update');
 
-        // GET /profile/information/email → mostra il form per modificare l'email
+    // GET /profile/information/email → mostra il form per modificare l'email
     Route::get('/profile/information/email', [ProfileController::class, 'editEmail'])
-    ->name('profile.information.email');
+        ->name('profile.information.email');
 
-
-    // POST /profile/information/email → aggiorna l'email dell'utente
-Route::post('/profile/information/email', [ProfileController::class, 'updateEmail'])
-    ->name('profile.information.email.update');
+    // PATCH /profile/information/email → aggiorna l'email dell'utente
+    Route::patch('/profile/information/email', [ProfileController::class, 'updateEmail'])
+        ->name('profile.information.email.update');
 
     // GET /profile/information/password → mostra il form per modificare la password
-Route::get('/profile/information/password', [ProfileController::class, 'editPassword'])
-    ->name('profile.information.password');
+    Route::get('/profile/information/password', [ProfileController::class, 'editPassword'])
+        ->name('profile.information.password');
 
-
-    // POST /profile/information/password → aggiorna la password dell'utente
-Route::post('/profile/information/password', [ProfileController::class, 'updatePassword'])
-    ->name('profile.information.password.update');
+    // PATCH /profile/information/password → aggiorna la password dell'utente
+    Route::patch('/profile/information/password', [ProfileController::class, 'updatePassword'])
+        ->name('profile.information.password.update');
 
 });

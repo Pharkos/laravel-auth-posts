@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Post;
 use App\Models\User;
 
-
 class PostPolicy
 {
     // Solo l'autore del post può modificarlo
