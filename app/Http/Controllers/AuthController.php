@@ -10,58 +10,60 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    // ==========================================================
+    // REGISTRAZIONE
+    // ==========================================================
+
+    // Mostra il form di registrazione
     public function showRegisterForm()
     {
-        return view('register', ['pageTitle' => 'Register',
-            'metaTitle' => 'la mia pagina Register']);
+        return view('register', [
+            'pageTitle' => 'Register',
+            'metaTitle' => 'Pagina di registrazione',
+        ]);
     }
 
     // Registrazione: valida i dati, crea l'utente ed effettua il login automatico
     public function register(Request $request)
     {
-
-        $validateData = $request->validate(
-            [
-                'name' => 'required|string|max:255',
-
-                // unique:user,email: dice che non possono stare utenti con la stessa email
-                // quindi users indica il nome della tabella e email il nome del campo
-                'email' => 'required|email|max:255|unique:users,email',
-                'password' => 'required|string|min:8|confirmed',
-            ]
-        );
-
-        // crea l'user in base al modello, inserisci solo i campi che sono riportati
-        // nel modello user
-
-        $user = User::create([
-            'name' => $validateData['name'],
-            'email' => $validateData['email'],
-            // Non serve Hash::make(): nel model User il campo 'password'
-            // ha il cast 'hashed', quindi Laravel genera automaticamente l'hash prima del salvataggio
-            'password' => $validateData['password'],
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            // unique:users,email → non possono esistere due utenti con la stessa email
+            'email' => 'required|email|max:255|unique:users,email',
+            // confirmed → deve coincidere con il campo 'password_confirmation'
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // authentication fa il login in automatico
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            // Non serve Hash::make(): nel model User il campo 'password'
+            // ha il cast 'hashed', quindi Laravel genera l'hash prima del salvataggio
+            'password' => $validatedData['password'],
+        ]);
+
+        // Login automatico: l'utente appena registrato non deve rifare il login
         Auth::login($user);
 
-        // verrai madato alla pagina che decidi noi abbiamo messo home
-        // with crea la chiave success che stamperà il messaggio impostato
-        return redirect()->route('home')->with('success', 'Registrazione avvenuta con successo. Login effettuato');
-
+        return redirect()
+            ->route('home')
+            ->with('success', 'Registrazione avvenuta con successo. Login effettuato');
     }
 
-    // ----------- Sezione Login -----------
+    // ==========================================================
+    // LOGIN & LOGOUT
+    // ==========================================================
 
-    // ----------- metodo get
+    // Mostra il form di login
     public function showLoginForm()
     {
-        return view('login', ['pageTitle' => 'Login',
-            'metaTitle' => 'la mia pagina Login']);
-
+        return view('login', [
+            'pageTitle' => 'Login',
+            'metaTitle' => 'Pagina di login',
+        ]);
     }
 
-        // Login: verifica le credenziali e autentica l'utente
+    // Login: verifica le credenziali e autentica l'utente
     public function login(Request $request)
     {
         // Valida solo il formato dei dati (non controlla il database):
