@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Support\Facades\Gate;
 
@@ -10,7 +10,8 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
+        // Post più recenti per primi, 9 per pagina
+        $posts = Post::latest()->paginate(9);
 
         return view('posts.index', [
             'pageTitle' => 'Posts',
@@ -27,28 +28,22 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    // Salva un nuovo post: la validazione è già stata fatta da PostRequest
+    public function store(PostRequest $request)
     {
-        // 1. Validation
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+        $validatedData = $request->validated();
 
-        // 2. Create Post
         Post::create([
             'title' => $validatedData['title'],
             'content' => $validatedData['content'],
             'user_id' => auth()->id(),
         ]);
 
-        // 3. Redirect
-        return redirect()->route('post.index');
+        return redirect()->route('post.index')->with('success', 'Post creato con successo');
     }
 
     public function show(Post $post)
     {
-       
         return view('posts.show', [
             'pageTitle' => 'Show',
             'metaTitle' => 'La mia pagina Show',
@@ -58,7 +53,6 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        
         Gate::authorize('update', $post);
 
         return view('posts.edit', [
@@ -68,19 +62,14 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(Request $request, Post $post)
+    // Aggiorna un post: solo l'autore (PostPolicy), dati già validati da PostRequest
+    public function update(PostRequest $request, Post $post)
     {
-        
         Gate::authorize('update', $post);
 
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+        $post->update($request->validated());
 
-        $post->update($validatedData);
-
-        return redirect()->route('post.show', $post->id);
+        return redirect()->route('post.show', $post)->with('success', 'Post aggiornato con successo');
     }
 
     public function destroy(Post $post)

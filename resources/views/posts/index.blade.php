@@ -64,6 +64,10 @@
 
     </div>
 
+
+    {{-- Link di navigazione tra le pagine (1, 2, 3...) --}}
+    {{ $posts->links() }}
+
 @endif
 
 @endsection
