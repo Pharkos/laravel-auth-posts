@@ -15,17 +15,27 @@
 
         @csrf
 
-        <label for="name">
+        {{-- Laravel trasforma la richiesta POST in PATCH --}}
+        @method('PATCH')
+
+        <label for="name" class="form-label">
             New Name
         </label>
 
+        {{-- 'is-invalid' colora il campo di rosso se c'è un errore di validazione --}}
         <input
             type="text"
             id="name"
             name="name"
-            value="{{ $currentUser->name }}"
+            class="form-control @error('name') is-invalid @enderror"
+            value="{{ old('name', $currentUser->name) }}"
             required
         >
+
+        {{-- Messaggio di errore sotto il campo (es. nome troppo lungo) --}}
+        @error('name')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
 
         <button type="submit">
             Update Name

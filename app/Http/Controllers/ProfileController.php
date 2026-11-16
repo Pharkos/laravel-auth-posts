@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
+
 
 
 
@@ -154,39 +154,25 @@ public function editPassword()
 // Aggiorna la password dell'utente autenticato
 public function updatePassword(Request $request)
 {
-    // Valida i dati ricevuti dal form
-    $validatedData = $request->validate([
-        'current_password' => 'required|string',
+    // 'current_password': Laravel confronta la password inserita con quella
+    // dell'utente loggato (fa Hash::check internamente).
+    // Se è sbagliata, l'errore va in $errors e appare sotto il campo.
+       $validatedData = $request->validate([
+        'current_password' => 'required|current_password',
         'password' => 'required|string|min:8|confirmed',
+    ], [
+        // Messaggio personalizzato: più chiaro di quello di default
+        'current_password.current_password' => 'La password attuale non è corretta.',
+    ]);
+    // Non serve Hash::make(): nel model User il campo 'password'
+    // ha il cast 'hashed', quindi Laravel genera l'hash prima del salvataggio
+    auth()->user()->update([
+        'password' => $validatedData['password'],
     ]);
 
-
-    // Recupera l'utente attualmente autenticato
-    $currentUser = auth()->user();
-
-// Controlla che la password attuale sia corretta
-    if (!Hash::check($validatedData['current_password'], $currentUser->password)) {
-
-        return back()->with('error', 'La password attuale non è corretta.');
-    }
-
-  
-// Aggiorna la password nel database
-// Non utilizziamo Hash::make() perché nel modello User
-// il campo "password" ha già il cast "hashed".
-// Laravel esegue automaticamente l'hashing prima di salvare
-// la nuova password nel database.
-$currentUser->update([
-    'password' => $validatedData['password'],
-]);
-
-// Torna alla pagina delle informazioni personali
-return redirect()
-    ->route('profile.information')
-    ->with('success', 'Password aggiornata con successo');
-
-
-
+    return redirect()
+        ->route('profile.information')
+        ->with('success', 'Password aggiornata con successo');
 }
 
 
