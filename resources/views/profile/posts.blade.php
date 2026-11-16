@@ -36,8 +36,11 @@
 
             @endforeach
 
-        </ul>
 
+
+        </ul>
+     {{-- Link di navigazione tra le pagine --}}
+        {{ $posts->links() }}
     @endif
 
 </div>
