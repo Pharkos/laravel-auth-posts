@@ -14,7 +14,7 @@
 </div>
 
 {{-- route chiama la rotta nominata ->name('validateForm') --}}
-<form action="{{ route('loginUser') }}" method="POST">
+<form action="{{ route('login.store') }}" method="POST">
     {{-- evita attacchi cross site request forgery richiesta di falsificazione tra siti
           sfrutta il vostro log per catturare la sessione avviata.
           per evitare un attacco viene attivato un token di propietà Laravel e cosi faccendo 

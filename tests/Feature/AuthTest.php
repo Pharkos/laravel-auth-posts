@@ -97,4 +97,48 @@ class AuthTest extends TestCase
         $this->assertNotEquals('password123', $user->password);
         $this->assertTrue(Hash::check('password123', $user->password));
     }
+
+        // Rate limiting: dopo 5 tentativi falliti anche la password corretta viene bloccata
+    public function test_login_is_blocked_after_five_failed_attempts(): void
+    {
+        $user = User::factory()->create(); // password: 'password'
+
+        // 5 tentativi con password sbagliata
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/login', [
+                'email' => $user->email,
+                'password' => 'sbagliata',
+            ]);
+        }
+
+        // 6° tentativo con la password CORRETTA: deve essere bloccato
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])->assertSessionHasErrors('email');
+
+        $this->assertGuest();
+    }
+
+    // Il limite vale per la singola email: un'altra email non è bloccata
+    public function test_rate_limit_is_per_email(): void
+    {
+        $blockedUser = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/login', [
+                'email' => $blockedUser->email,
+                'password' => 'sbagliata',
+            ]);
+        }
+
+        // Un altro utente dallo stesso IP può ancora fare login
+        $this->post('/login', [
+            'email' => $otherUser->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticatedAs($otherUser);
+    }
 }

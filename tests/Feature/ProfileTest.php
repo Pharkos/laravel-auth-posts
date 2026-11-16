@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +24,29 @@ class ProfileTest extends TestCase
     public function test_guest_cannot_access_profile(): void
     {
         $this->get('/profile')->assertRedirect('/login');
+    }
+
+    // ---------- My Posts ----------
+
+    // L'utente vede solo i propri post, non quelli degli altri
+    public function test_user_sees_only_own_posts(): void
+    {
+        $user = User::factory()->create();
+
+        $ownPost = Post::factory()->create([
+            'user_id' => $user->id,
+            'title' => 'Il mio post',
+        ]);
+
+        $otherPost = Post::factory()->create([
+            'title' => 'Post di un altro utente',
+        ]);
+
+        $this->actingAs($user)
+            ->get('/profile/posts')
+            ->assertOk()
+            ->assertSee($ownPost->title)
+            ->assertDontSee($otherPost->title);
     }
 
     // ---------- Nome ----------

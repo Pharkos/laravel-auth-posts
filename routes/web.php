@@ -51,7 +51,7 @@ Route::middleware('guest')->group(function () {
 
     // POST /login → verifica le credenziali ed effettua il Login
     Route::post('/login', [AuthController::class, 'login'])
-        ->name('loginUser');
+        ->name('login.store');
 });
 
 // ---------- Logout ----------
@@ -61,7 +61,7 @@ Route::middleware('guest')->group(function () {
 // POST /logout → effettua il Logout dell'utente
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
-    ->name('logoutUser');
+    ->name('logout');
 
 // ==========================================================
 // POSTS
