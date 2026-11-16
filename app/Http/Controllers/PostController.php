@@ -16,7 +16,7 @@ class PostController extends Controller
         return view('posts.index', [
             'pageTitle' => 'Posts',
             'metaTitle' => 'Lista dei post',
-            'posts' => $posts
+            'posts' => $posts,
         ]);
     }
 
@@ -58,7 +58,7 @@ class PostController extends Controller
         return view('posts.edit', [
             'pageTitle' => 'Modifica Post',
             'metaTitle' => 'La mia pagina modifica',
-            'post' => $post
+            'post' => $post,
         ]);
     }
 

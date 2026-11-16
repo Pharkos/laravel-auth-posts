@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
         //
 
         // Usa i template di paginazione di Bootstrap 5 invece di Tailwind
-        Paginator::useBootstrapFive();          
+        Paginator::useBootstrapFive();
     }
 }
