@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -70,16 +71,29 @@ class PostController extends Controller
         ]);
     }
 
-    // Aggiorna un post: solo l'autore (PostPolicy), dati già validati da PostRequest
+        // Aggiorna un post: solo l'autore (PostPolicy), dati già validati da PostRequest
     public function update(PostRequest $request, Post $post)
     {
         Gate::authorize('update', $post);
 
-        $post->update($request->validated());
+        // Dati validati SENZA l'immagine: se l'utente non sceglie un nuovo file,
+        // la colonna 'image' non viene toccata e la vecchia immagine resta
+        $data = $request->safe()->except('image');
+
+        if ($request->hasFile('image')) {
+            // Prima salviamo la nuova immagine...
+            $data['image'] = $request->file('image')->store('posts', 'public');
+
+            // ...poi cancelliamo la vecchia dal disco, per non lasciare file orfani
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+        }
+
+        $post->update($data);
 
         return redirect()->route('posts.show', $post)->with('success', 'Post aggiornato con successo');
     }
-
     public function destroy(Post $post)
     {
         Gate::authorize('delete', $post);
