@@ -29,8 +29,7 @@ class ProfileController extends Controller
 
         // posts() (con parentesi) restituisce una query: possiamo ordinare e paginare
         // prima di eseguirla. Solo i post dell'utente, i più recenti per primi, 9 per pagina
-        
-        
+
         $posts = $currentUser->posts()->latest()->paginate(9);
 
         return view('profile.posts', [

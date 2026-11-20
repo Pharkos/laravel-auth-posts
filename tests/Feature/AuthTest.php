@@ -98,7 +98,7 @@ class AuthTest extends TestCase
         $this->assertTrue(Hash::check('password123', $user->password));
     }
 
-        // Rate limiting: dopo 5 tentativi falliti anche la password corretta viene bloccata
+    // Rate limiting: dopo 5 tentativi falliti anche la password corretta viene bloccata
     public function test_login_is_blocked_after_five_failed_attempts(): void
     {
         $user = User::factory()->create(); // password: 'password'
