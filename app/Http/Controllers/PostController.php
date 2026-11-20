@@ -28,14 +28,22 @@ class PostController extends Controller
         ]);
     }
 
-    // Salva un nuovo post: la validazione è già stata fatta da PostRequest
+        // Salva un nuovo post: la validazione è già stata fatta da PostRequest
     public function store(PostRequest $request)
     {
         $validatedData = $request->validated();
 
+        // Se è stata caricata un'immagine, la salviamo nel disco 'public'
+        // (storage/app/public/posts) e nel database teniamo solo il percorso
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('posts', 'public');
+        }
+
         Post::create([
             'title' => $validatedData['title'],
             'content' => $validatedData['content'],
+            'image' => $imagePath,
             'user_id' => auth()->id(),
         ]);
 

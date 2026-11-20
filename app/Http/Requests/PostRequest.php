@@ -20,6 +20,8 @@ class PostRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            // Immagine facoltativa: solo jpg/png/webp, massimo 2 MB
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
     }
 }
