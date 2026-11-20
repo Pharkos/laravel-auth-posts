@@ -11,8 +11,8 @@ class PostController extends Controller
 {
     public function index()
     {
-        // Post più recenti per primi, 9 per pagina
-        $posts = Post::latest()->paginate(9);
+    // with('user'): carica gli autori con UNA query sola (evita il problema N+1)
+        $posts = Post::with('user')->latest()->paginate(9);
 
         return view('posts.index', [
             'pageTitle' => 'Posts',
