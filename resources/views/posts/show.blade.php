@@ -9,6 +9,17 @@
         ← Torna alla lista
     </a>
 
+    {{-- Nella pagina del post mostriamo solo un'immagine vera, non il placeholder.
+         object-fit: contain → l'immagine si vede intera, senza tagli --}}
+    @if ($post->image)
+        <img
+            src="{{ $post->image_url }}"
+            alt="{{ $post->title }}"
+            class="img-fluid rounded mb-3 d-block mx-auto"
+            style="max-height: 500px; object-fit: contain;"
+        >
+    @endif
+
     <h2>{{ $post->title }}</h2>
 
     <p>
@@ -21,32 +32,30 @@
     </div>
 
     <hr>
-    @can('update' , $post)
-    
-    {{-- Modifica del post --}}
-    <a class="btn" href="{{ route('posts.edit', $post->id) }}">
-        Modifica Post
-    </a>
 
+    @can('update', $post)
+        {{-- Modifica del post --}}
+        <a class="btn" href="{{ route('posts.edit', $post->id) }}">
+            Modifica Post
+        </a>
     @endcan
 
-    {{-- Eliminazione del post --}}
+    @can('delete', $post)
+        {{-- Eliminazione del post --}}
+        <form
+            action="{{ route('posts.destroy', $post->id) }}"
+            method="POST"
+            style="display:inline"
+        >
+            @csrf
 
-    @can('delete' , $post)
-    <form
-        action="{{ route('posts.destroy', $post->id) }}"
-        method="POST"
-        style="display:inline"
-    >
-        @csrf
+            {{-- Laravel trasforma la richiesta POST in DELETE --}}
+            @method('DELETE')
 
-        {{-- Laravel trasforma la richiesta POST in DELETE --}}
-        @method('DELETE')
-
-        <button type="submit" class="btn btn-danger">
-            Elimina
-        </button>
-    </form>
+            <button type="submit" class="btn btn-danger">
+                Elimina
+            </button>
+        </form>
     @endcan
 
 </div>

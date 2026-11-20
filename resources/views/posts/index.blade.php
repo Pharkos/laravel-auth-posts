@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -40,6 +39,14 @@
 
                 <div class="card">
 
+                    {{-- Immagine del post (o placeholder): altezza fissa per card uniformi --}}
+                    <img
+                        src="{{ $post->image_url }}"
+                        class="card-img-top"
+                        alt="{{ $post->title }}"
+                        style="height: 200px; object-fit: cover;"
+                    >
+
                     <div class="card-body">
 
                         <h4 class="card-title mb-2 text-center">
@@ -64,11 +71,9 @@
 
     </div>
 
-
     {{-- Link di navigazione tra le pagine (1, 2, 3...) --}}
     {{ $posts->links() }}
 
 @endif
 
 @endsection
-
