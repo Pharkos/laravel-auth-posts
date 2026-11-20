@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
@@ -21,7 +21,7 @@ class Post extends Model
 
     ];
 
-        public function user()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -35,4 +35,3 @@ class Post extends Model
             : asset('images/post-placeholder.jpg'));
     }
 }
-

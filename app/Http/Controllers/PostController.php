@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     public function index()
     {
-    // with('user'): carica gli autori con UNA query sola (evita il problema N+1)
+        // with('user'): carica gli autori con UNA query sola (evita il problema N+1)
         $posts = Post::with('user')->latest()->paginate(9);
 
         return view('posts.index', [
@@ -29,7 +29,7 @@ class PostController extends Controller
         ]);
     }
 
-        // Salva un nuovo post: la validazione è già stata fatta da PostRequest
+    // Salva un nuovo post: la validazione è già stata fatta da PostRequest
     public function store(PostRequest $request)
     {
         $validatedData = $request->validated();
@@ -71,7 +71,7 @@ class PostController extends Controller
         ]);
     }
 
-        // Aggiorna un post: solo l'autore (PostPolicy), dati già validati da PostRequest
+    // Aggiorna un post: solo l'autore (PostPolicy), dati già validati da PostRequest
     public function update(PostRequest $request, Post $post)
     {
         Gate::authorize('update', $post);
@@ -94,7 +94,8 @@ class PostController extends Controller
 
         return redirect()->route('posts.show', $post)->with('success', 'Post aggiornato con successo');
     }
-        // Elimina un post: solo l'autore (PostPolicy)
+
+    // Elimina un post: solo l'autore (PostPolicy)
     public function destroy(Post $post)
     {
         Gate::authorize('delete', $post);

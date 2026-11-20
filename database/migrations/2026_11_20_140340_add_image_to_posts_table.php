@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-        // Aggiunge la colonna 'image' alla tabella posts esistente
+    // Aggiunge la colonna 'image' alla tabella posts esistente
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
@@ -23,4 +23,3 @@ return new class extends Migration
         });
     }
 };
-
