@@ -94,14 +94,22 @@ class PostController extends Controller
 
         return redirect()->route('posts.show', $post)->with('success', 'Post aggiornato con successo');
     }
+        // Elimina un post: solo l'autore (PostPolicy)
     public function destroy(Post $post)
     {
         Gate::authorize('delete', $post);
 
-        // Elimina il post
+        // Salviamo il percorso prima di eliminare il post
+        $imagePath = $post->image;
+
+        // Prima eliminiamo il post dal database...
         $post->delete();
 
-        // Torna alla lista dei post
+        // ...poi il file dal disco, per non lasciare file orfani
+        if ($imagePath) {
+            Storage::disk('public')->delete($imagePath);
+        }
+
         return redirect()
             ->route('posts.index')
             ->with('success', 'Post eliminato con successo');
