@@ -3,22 +3,29 @@
 
 @include('partials.head', ['pageTitle' => $pageTitle, 'metaTitle' => $metaTitle])
 
-<body>
-    <nav class="nav-container">
-     @include('partials.menu')
-     </nav>
+{{-- d-flex flex-column min-vh-100: il footer resta in fondo anche nelle pagine corte --}}
+<body class="d-flex flex-column min-vh-100 bg-light">
 
-    <div class="alert-container">
+    {{-- Barra di navigazione --}}
+    @include('partials.menu')
+
+    {{-- Contenuto principale della pagina --}}
+    <main class="container py-4 flex-grow-1">
+
+        {{-- Messaggi flash (successo, errore...) --}}
         @include('partials.messages')
-    </div>
-
-    <div class="container py-4">
 
         @yield('content')
 
-    </div>
+    </main>
 
-       
+    {{-- Footer --}}
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container text-center text-muted small">
+            &copy; {{ date('Y') }} Laravel Auth &amp; Posts
+        </div>
+    </footer>
+
 </body>
 
 </html>
