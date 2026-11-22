@@ -30,7 +30,8 @@ class ProfileController extends Controller
         // posts() (con parentesi) restituisce una query: possiamo ordinare e paginare
         // prima di eseguirla. Solo i post dell'utente, i più recenti per primi, 9 per pagina
 
-        $posts = $currentUser->posts()->latest()->paginate(9);
+        // with('user'): la card mostra il nome dell'autore, lo carichiamo in una sola query (evita N+1)
+        $posts = $currentUser->posts()->with('user')->latest()->paginate(9);
 
         return view('profile.posts', [
             'pageTitle' => 'My Posts',
