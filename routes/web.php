@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -9,13 +10,8 @@ use Illuminate\Support\Facades\Route;
 // HOME & ABOUT
 // ==========================================================
 
-// GET / → mostra la pagina Home
-Route::get('/', function () {
-    return view('home', [
-        'pageTitle' => 'Homepage',
-        'metaTitle' => 'la mia pagina Home',
-    ]);
-})->name('home');
+// GET / → mostra la Home con gli ultimi post
+Route::get('/', HomeController::class)->name('home');
 
 // GET /about → mostra la pagina About
 Route::get('/about', function () {
