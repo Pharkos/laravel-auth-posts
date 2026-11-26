@@ -145,4 +145,24 @@ class ProfileTest extends TestCase
 
         $this->assertTrue(Hash::check('nuovapassword', $user->fresh()->password));
     }
+
+
+
+
+        public function test_dashboard_counts_only_own_posts(): void
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        // 2 post dell'utente e 1 di un altro utente
+        Post::factory()->count(2)->create(['user_id' => $user->id]);
+        Post::factory()->create(['user_id' => $otherUser->id]);
+
+        // assertViewHas: controlla il valore passato dal controller alla view
+        $this->actingAs($user)
+            ->get('/profile')
+            ->assertOk()
+            ->assertViewHas('postsCount', 2)
+            ->assertViewHas('latestPosts', fn ($posts) => $posts->count() === 2);
+    }
 }

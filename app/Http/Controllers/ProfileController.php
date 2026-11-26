@@ -7,18 +7,25 @@ use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
-    // Mostra la pagina principale del profilo dell'utente autenticato
+       // Mostra la dashboard del profilo dell'utente autenticato
     public function index()
     {
-
         // Recupera l'utente attualmente autenticato
         $currentUser = auth()->user();
 
-        // Restituisce la view principale del profilo
-        return view('profile.index',
-            ['pageTitle' => 'My Profile',
-                'metaTitle' => 'Pagina principale del profilo',
-                'currentUser' => $currentUser, ]);
+        // count(): esegue un COUNT in SQL, senza caricare tutti i post in memoria
+        $postsCount = $currentUser->posts()->count();
+
+        // Gli ultimi 3 post dell'utente per la lista rapida
+        $latestPosts = $currentUser->posts()->latest()->take(3)->get();
+
+        return view('profile.index', [
+            'pageTitle' => 'Il mio profilo',
+            'metaTitle' => 'Dashboard del profilo',
+            'currentUser' => $currentUser,
+            'postsCount' => $postsCount,
+            'latestPosts' => $latestPosts,
+        ]);
     }
 
     // Mostra i post dell'utente autenticato
