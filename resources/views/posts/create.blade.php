@@ -2,38 +2,32 @@
 
 @section('content')
 
-<div class="container">
+<div class="col-lg-8 mx-auto">
 
-    <h2>Crea il tuo post</h2>
+    {{-- Torna alla lista dei post --}}
+    <a href="{{ route('posts.index') }}" class="btn btn-link px-0 mb-3">
+        ← Torna ai post
+    </a>
 
-    {{-- enctype multipart/form-data: obbligatorio per inviare file, altrimenti arriva solo il nome --}}
-    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
 
-        @csrf
+            <h1 class="h3 mb-4">Nuovo post</h1>
 
-        titolo:
-        <input type="text" name="title" value="{{ old('title') }}" required>
-        <br>
+            {{-- enctype necessario per inviare il file dell'immagine --}}
+            <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-        Contenuto:
-        <textarea name="content" required>{{ old('content') }}</textarea>
-        <br>
+                @include('posts.partials.form')
 
-        {{-- Immagine facoltativa: 'accept' è solo un aiuto per il browser,
-             il vero controllo lo fa PostRequest --}}
-        Immagine (facoltativa):
-        <input type="file" name="image" accept="image/*">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Pubblica</button>
+                    <a href="{{ route('posts.index') }}" class="btn btn-outline-secondary">Annulla</a>
+                </div>
+            </form>
 
-        @error('image')
-            <p style="color:red">{{ $message }}</p>
-        @enderror
-        <br>
-
-        <button type="submit" class="btn">
-            Salva Post
-        </button>
-
-    </form>
+        </div>
+    </div>
 
 </div>
 

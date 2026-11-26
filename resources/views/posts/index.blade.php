@@ -2,78 +2,40 @@
 
 @section('content')
 
-<div class="row align-items-center mb-4">
-
-    {{-- Empty column: visible only on medium screens and larger --}}
-    <div class="col-md-4 d-none d-md-block"></div>
-
-    {{-- Page title --}}
-    <div class="col-12 col-md-4 text-center">
-        <h1 class="mb-0">Posts</h1>
-    </div>
-
-    {{-- Create Post action --}}
-    <div class="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
+    {{-- Intestazione: titolo + pulsante "Nuovo post" (solo per utenti loggati) --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">Post</h1>
 
         @auth
-            <a href="{{ route('posts.create') }}">
-                Create Post
+            <a href="{{ route('posts.create') }}" class="btn btn-primary">
+                + Nuovo post
             </a>
         @endauth
-
     </div>
 
-</div>
+    @if ($posts->isEmpty())
 
-@if ($posts->isEmpty())
+        <div class="alert alert-light border text-center">
+            Non ci sono ancora post.
+        </div>
 
-    <p>Non ci sono post</p>
+    @else
 
-@else
-
-    <div class="row">
-
-        @foreach ($posts as $post)
-
-            <div class="col-12 col-md-6 col-lg-4 mb-4">
-
-                <div class="card">
-
-                    {{-- Immagine del post (o placeholder): altezza fissa per card uniformi --}}
-                    <img
-                        src="{{ $post->image_url }}"
-                        class="card-img-top"
-                        alt="{{ $post->title }}"
-                        style="height: 200px; object-fit: cover;"
-                    >
-
-                    <div class="card-body">
-
-                        <h4 class="card-title mb-2 text-center">
-                            {{ $post->title }}
-                        </h4>
-
-                        <p class="card-text mb-3">
-                            {{ Str::limit($post->content, 50) }}
-                        </p>
-
-                        <a href="{{ route('posts.show', $post->id) }}">
-                            Leggi post completo
-                        </a>
-
-                    </div>
-
+        {{-- Griglia responsive: 1 colonna su mobile, 2 su tablet, 3 su desktop.
+             g-4 = spazio uniforme tra le card --}}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach ($posts as $post)
+                <div class="col">
+                    <x-post-card :post="$post" />
                 </div>
+            @endforeach
+        </div>
 
-            </div>
+        {{-- Link di navigazione tra le pagine (1, 2, 3...) --}}
+        <div class="mt-4">
+            {{ $posts->links() }}
+        </div>
 
-        @endforeach
-
-    </div>
-
-    {{-- Link di navigazione tra le pagine (1, 2, 3...) --}}
-    {{ $posts->links() }}
-
-@endif
+    @endif
 
 @endsection

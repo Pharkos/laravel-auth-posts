@@ -2,56 +2,35 @@
 
 @section('content')
 
-<div class="container">
+<div class="col-lg-8 mx-auto">
 
-    <h2>Modifica Post</h2>
+    {{-- Torna al dettaglio del post --}}
+    <a href="{{ route('posts.show', $post) }}" class="btn btn-link px-0 mb-3">
+        ← Torna al post
+    </a>
 
-    {{-- enctype multipart/form-data: obbligatorio per inviare file --}}
-    <form action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
 
-        @csrf
+            <h1 class="h3 mb-4">Modifica post</h1>
 
-        {{-- Laravel trasforma la richiesta POST in PUT --}}
-        @method('PUT')
+            {{-- enctype necessario per inviare il file dell'immagine --}}
+            <form action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-        titolo:
-        <input
-            type="text"
-            name="title"
-            value="{{ old('title', $post->title) }}"
-            required
-        >
-        <br><br>
+                {{-- Laravel trasforma la richiesta POST in PUT --}}
+                @method('PUT')
 
-        contenuto:
-        <textarea name="content" required>{{ old('content', $post->content) }}</textarea>
-        <br><br>
+                @include('posts.partials.form')
 
-        {{-- Immagine attuale: la mostriamo solo se il post ne ha una --}}
-        @if ($post->image)
-            <p>Immagine attuale:</p>
-            <img
-                src="{{ $post->image_url }}"
-                alt="{{ $post->title }}"
-                style="max-width: 200px; height: auto;"
-            >
-            <br><br>
-        @endif
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Salva modifiche</button>
+                    <a href="{{ route('posts.show', $post) }}" class="btn btn-outline-secondary">Annulla</a>
+                </div>
+            </form>
 
-        {{-- Nuova immagine (facoltativa): se non si sceglie un file, resta quella attuale --}}
-        Nuova immagine (facoltativa):
-        <input type="file" name="image" accept="image/*">
-
-        @error('image')
-            <p style="color:red">{{ $message }}</p>
-        @enderror
-        <br><br>
-
-        <button class="btn" type="submit">
-            Aggiorna
-        </button>
-
-    </form>
+        </div>
+    </div>
 
 </div>
 

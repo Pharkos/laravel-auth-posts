@@ -6,6 +6,7 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -15,8 +16,8 @@ class PostController extends Controller
         $posts = Post::with('user')->latest()->paginate(9);
 
         return view('posts.index', [
-            'pageTitle' => 'Posts',
-            'metaTitle' => 'Lista dei post',
+            'pageTitle' => 'Post',
+            'metaDescription' => 'Lista dei post',
             'posts' => $posts,
         ]);
     }
@@ -24,8 +25,8 @@ class PostController extends Controller
     public function create()
     {
         return view('posts.create', [
-            'pageTitle' => 'Creazione Post',
-            'metaTitle' => 'Pagina di creazione del post',
+            'pageTitle' => 'Nuovo post',
+            'metaDescription' => 'Pagina di creazione del post',
         ]);
     }
 
@@ -54,8 +55,10 @@ class PostController extends Controller
     public function show(Post $post)
     {
         return view('posts.show', [
-            'pageTitle' => 'Show',
-            'metaTitle' => 'La mia pagina Show',
+            // Nella scheda del browser compare il titolo del post
+            'pageTitle' => $post->title,
+            // Le prime 150 lettere del contenuto come descrizione per i motori di ricerca
+            'metaDescription' => Str::limit($post->content, 150),
             'post' => $post,
         ]);
     }
@@ -65,8 +68,8 @@ class PostController extends Controller
         Gate::authorize('update', $post);
 
         return view('posts.edit', [
-            'pageTitle' => 'Modifica Post',
-            'metaTitle' => 'La mia pagina modifica',
+            'pageTitle' => 'Modifica post',
+            'metaDescription' => 'Modifica del post',
             'post' => $post,
         ]);
     }

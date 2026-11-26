@@ -1,47 +1,52 @@
-
 @extends('layouts.app')
 
 @section('content')
 
-<div class="container">
+<div class="col-lg-8 mx-auto">
 
-    <h1>Personal Information</h1>
+    <h1 class="h3 mb-4">Dati personali</h1>
 
+    <div class="card shadow-sm">
 
-    {{-- ==================================================
-         USER INFORMATION
-         ================================================== --}}
+        {{-- list-group-flush: righe senza bordi esterni, dentro la card --}}
+        <ul class="list-group list-group-flush">
 
-    <h2>Account Information</h2>
+            {{-- Nome --}}
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                <div>
+                    <div class="small text-muted">Nome</div>
+                    <div class="fw-semibold">{{ $currentUser->name }}</div>
+                </div>
+                <a href="{{ route('profile.information.name') }}" class="btn btn-outline-primary btn-sm">
+                    Modifica
+                </a>
+            </li>
 
-    <p>
-        <strong>Name:</strong>
-        {{ $currentUser->name }}
+            {{-- Email --}}
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                <div>
+                    <div class="small text-muted">Email</div>
+                    <div class="fw-semibold">{{ $currentUser->email }}</div>
+                </div>
+                <a href="{{ route('profile.information.email') }}" class="btn btn-outline-primary btn-sm">
+                    Modifica
+                </a>
+            </li>
 
-        <a href="{{ route('profile.information.name') }}">
-            Change Name
-        </a>
-    </p>
+            {{-- Password: non mostriamo mai il valore reale --}}
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                <div>
+                    <div class="small text-muted">Password</div>
+                    <div class="fw-semibold">••••••••</div>
+                </div>
+                <a href="{{ route('profile.information.password') }}" class="btn btn-outline-primary btn-sm">
+                    Modifica
+                </a>
+            </li>
 
-    <p>
-        <strong>Email:</strong>
-        {{ $currentUser->email }}
-
-        <a href="{{ route('profile.information.email') }}">
-            Change Email
-        </a>
-    </p>
-
-    <p>
-        <strong>Password:</strong>
-        ********
-
-        <a href="{{ route('profile.information.password') }}">
-            Change Password
-        </a>
-    </p>
+        </ul>
+    </div>
 
 </div>
 
 @endsection
-
