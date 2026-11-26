@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Route;
 // GET / → mostra la Home con gli ultimi post
 Route::get('/', HomeController::class)->name('home');
 
-// GET /about → mostra la pagina About
+// GET /about → mostra la pagina "Chi sono"
 Route::get('/about', function () {
     return view('about', [
-        'pageTitle' => 'About',
-        'metaTitle' => 'la mia pagina About',
+        'pageTitle' => 'Chi sono',
+        'metaDescription' => 'Chi ha sviluppato il progetto e con quali tecnologie',
     ]);
 })->name('about');
 

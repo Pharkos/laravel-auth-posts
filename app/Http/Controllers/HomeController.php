@@ -14,7 +14,7 @@ class HomeController extends Controller
 
         return view('home', [
             'pageTitle' => 'Home',
-            'metaTitle' => 'Laravel Auth & Posts: pagina iniziale',
+            'metaDescription' => 'Laravel Auth & Posts: pagina iniziale',
             'latestPosts' => $latestPosts,
         ]);
     }

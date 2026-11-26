@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
-       // Mostra la dashboard del profilo dell'utente autenticato
+    // Mostra la dashboard del profilo dell'utente autenticato
     public function index()
     {
         // Recupera l'utente attualmente autenticato
@@ -21,7 +21,7 @@ class ProfileController extends Controller
 
         return view('profile.index', [
             'pageTitle' => 'Il mio profilo',
-            'metaTitle' => 'Dashboard del profilo',
+            'metaDescription' => 'Dashboard del profilo',
             'currentUser' => $currentUser,
             'postsCount' => $postsCount,
             'latestPosts' => $latestPosts,
@@ -41,11 +41,10 @@ class ProfileController extends Controller
         $posts = $currentUser->posts()->with('user')->latest()->paginate(9);
 
         return view('profile.posts', [
-            'pageTitle' => 'My Posts',
-            'metaTitle' => 'I miei post',
+            'pageTitle' => 'I miei post',
+            'metaDescription' => 'I miei post',
             'posts' => $posts,
         ]);
-
     }
 
     // Mostra le informazioni personali dell'utente autenticato
@@ -56,8 +55,8 @@ class ProfileController extends Controller
 
         // Restituisce la view delle informazioni personali
         return view('profile.information.index', [
-            'pageTitle' => 'Personal Information',
-            'metaTitle' => 'Informazioni personali',
+            'pageTitle' => 'Dati personali',
+            'metaDescription' => 'Informazioni personali',
             'currentUser' => $currentUser,
         ]);
     }
@@ -70,8 +69,8 @@ class ProfileController extends Controller
 
         // Restituisce la view per la modifica del nome
         return view('profile.information.name', [
-            'pageTitle' => 'Change Name',
-            'metaTitle' => 'Modifica del nome',
+            'pageTitle' => 'Modifica nome',
+            'metaDescription' => 'Modifica del nome',
             'currentUser' => $currentUser,
         ]);
     }
@@ -106,8 +105,8 @@ class ProfileController extends Controller
 
         // Restituisce la view per la modifica dell'email
         return view('profile.information.email', [
-            'pageTitle' => 'Change Email',
-            'metaTitle' => 'Modifica dell\'email',
+            'pageTitle' => 'Modifica email',
+            'metaDescription' => 'Modifica dell\'email',
             'currentUser' => $currentUser,
         ]);
     }
@@ -144,8 +143,8 @@ class ProfileController extends Controller
     {
         // Restituisce la view per la modifica della password
         return view('profile.information.password', [
-            'pageTitle' => 'Change Password',
-            'metaTitle' => 'Modifica della password',
+            'pageTitle' => 'Modifica password',
+            'metaDescription' => 'Modifica della password',
         ]);
     }
 
@@ -162,6 +161,7 @@ class ProfileController extends Controller
             // Messaggio personalizzato: più chiaro di quello di default
             'current_password.current_password' => 'La password attuale non è corretta.',
         ]);
+
         // Non serve Hash::make(): nel model User il campo 'password'
         // ha il cast 'hashed', quindi Laravel genera l'hash prima del salvataggio
         auth()->user()->update([
